@@ -22,9 +22,10 @@ share/python-wheels/
 *.egg
 MANIFEST
 
-# 测试文件夹
-test/
-/user_data/
+# 运行时数据目录（知识库、向量索引等）
+data/
+
+
 # 配置文件（可能包含敏感信息）
 config.json
 cookies.json

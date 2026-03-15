@@ -15,7 +15,21 @@ config_base={
     "businessHours": {
         "start": "08:00",
         "end": "23:00"
-    }
+    },
+    # 千问大模型配置
+    "dashscope_api_key": "",
+    "qianwen_model": "qwen-turbo",
+    # 知识库与向量存储路径
+    "knowledge_base_path": "./data/knowledge_base",
+    "vector_store_path": "./data/vector_store",
+    # RAPTOR 树形检索开关
+    "raptor_enabled": True,
+    # 情感分析开关
+    "sentiment_enabled": True,
+    # 智能推荐开关
+    "recommendation_enabled": True,
+    # NLU（意图识别/实体抽取）开关
+    "nlu_enabled": True
 }
 
 class Config:
