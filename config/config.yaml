@@ -1,0 +1,135 @@
+# 电商智能客服系统统一配置文件
+# Customer-Agent + RAG-based4 + RAPTOR 融合项目
+
+# 系统基础配置
+system:
+  name: "电商智能客服系统"
+  version: "2.0.0"
+  environment: "development"
+
+# NLU 配置（意图识别 + 实体抽取）
+nlu:
+  intent_recognition:
+    enabled: true
+    threshold: 0.7
+    supported_intents:
+      - "greeting"           # 问候
+      - "farewell"           # 告别
+      - "product_inquiry"    # 商品咨询
+      - "order_status"       # 订单查询
+      - "return_request"     # 退款/退货
+      - "complaint"          # 投诉
+      - "shipping_inquiry"   # 物流查询
+      - "payment_issue"      # 支付问题
+      - "general_question"   # 通用问题
+      - "feedback"           # 反馈/建议
+
+  entity_extraction:
+    enabled: true
+    entities:
+      - "ORDER_ID"      # 订单号
+      - "PRODUCT"       # 商品名
+      - "MONEY"         # 金额
+      - "DATE"          # 日期
+      - "PHONE"         # 电话号码
+      - "PERSON"        # 人名
+
+# 知识库配置
+knowledge_base:
+  type: "faiss"
+  embedding:
+    model: "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+    dimension: 384
+    batch_size: 32
+
+  retrieval:
+    top_k: 5
+    similarity_threshold: 0.6
+    max_context_length: 2000
+
+  sources:
+    - type: "faq"
+      path: "./data/knowledge_base/faq.json"
+    - type: "documents"
+      path: "./data/knowledge_base/documents/"
+
+# RAPTOR 树形递归检索配置
+raptor:
+  enabled: true
+  max_levels: 3
+  cluster_size: 5
+  summary_max_tokens: 200
+  leaf_top_k: 3
+  node_top_k: 2
+
+# 生成配置（千问大模型）
+generation:
+  provider: "qianwen"
+  model: "qwen-turbo"
+  parameters:
+    temperature: 0.7
+    top_p: 0.9
+    max_tokens: 1000
+    repetition_penalty: 1.1
+
+  prompt_templates:
+    system: "你是一个专业的电商平台智能客服助手，熟悉商品、订单、退款、物流等相关业务，请根据提供的知识库内容，准确、礼貌地回答用户问题。"
+    rag: "知识库内容：\n{context}\n\n对话历史：\n{history}\n\n用户问题：{question}\n\n请根据以上知识库内容和对话历史，给出专业、友好的回复："
+
+# 多轮对话配置
+dialog:
+  max_history_turns: 10
+  session_timeout: 1800   # 30分钟
+  context_window: 5
+
+  state_tracking:
+    enabled: true
+    states:
+      - "initial"
+      - "information_gathering"
+      - "processing"
+      - "resolution"
+      - "escalation"
+      - "closed"
+
+# 情感分析配置
+sentiment:
+  enabled: true
+  threshold:
+    positive: 0.7
+    negative: 0.6
+
+  escalation:
+    enabled: true
+    negative_threshold: 0.8
+    urgency_keywords:
+      - "投诉"
+      - "举报"
+      - "退款"
+      - "骗子"
+      - "差评"
+      - "urgent"
+      - "immediately"
+
+# 智能推荐配置
+recommendation:
+  enabled: true
+  max_recommendations: 3
+  similarity_threshold: 0.6
+  categories:
+    - "products"
+    - "services"
+    - "solutions"
+    - "resources"
+
+# 缓存配置
+cache:
+  enabled: true
+  backend: "memory"
+  ttl: 3600
+  max_size: 1000
+
+# 日志配置
+logging:
+  level: "INFO"
+  log_conversations: true

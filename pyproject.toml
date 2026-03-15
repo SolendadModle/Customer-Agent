@@ -15,4 +15,12 @@ dependencies = [
     "flask-cors>=5.0.1",
     "pyqt6>=6.9.0",
     "pyqt6-fluent-widgets[full]>=1.8.1",
+    # 千问大模型 / RAG-based4 依赖
+    "dashscope>=1.14.0",
+    "sentence-transformers>=2.2.0",
+    "faiss-cpu>=1.7.4",
+    "numpy>=1.24.0",
+    "scikit-learn>=1.3.0",
+    "python-dotenv>=1.0.0",
+    "pyyaml>=6.0",
 ]
